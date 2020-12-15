@@ -13,7 +13,8 @@ export default function App() {
     BeamsWrapper.connect(
       '65',
       accessToken,
-      '4f758dae-7fb9-4314-8341-ff82ccd2b731'
+      '4f758dae-7fb9-4314-8341-ff82ccd2b731',
+      'http://10.10.0.86/Redant/proloco-api/public/app/auth/pusher'
     );
   }, []);
 

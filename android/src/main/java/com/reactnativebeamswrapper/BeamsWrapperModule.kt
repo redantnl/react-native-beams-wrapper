@@ -37,11 +37,11 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
     }
 
     @ReactMethod
-    fun connect(userId: String, token: String, instanceId: String) {
+    fun connect(userId: String, token: String, instanceId: String, authUrl: String) {
       PushNotifications.start(reactContext.getApplicationContext(), instanceId);
       Log.i("PusherModule", "Connected!");
       val tokenProvider = BeamsTokenProvider(
-        "http://10.10.0.86/Redant/proloco-api/public/app/auth/pusher",
+        authUrl,
         object: AuthDataGetter {
           override fun getAuthData(): AuthData {
             return AuthData(
