@@ -4,7 +4,7 @@ A react native wrapper for the Pusher Beams SDK
 
 ## Installation
 
-###Android
+### Android
 yarn / npm
 ```sh
 npm install react-native-beams-wrapper
