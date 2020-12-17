@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "9.0" }
+  s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/Nouw/react-native-beams-module.git", :tag => "#{s.version}" }
 
   
@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
   
 
   s.dependency "React"
+  s.dependency "PushNotifications", ">= 2.1.2"
 end
