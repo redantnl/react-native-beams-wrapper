@@ -61,3 +61,5 @@ lib/
 
 #Extra
 example/android/app/google-services.json
+CMakeLists.txt
+cmake-build-debug/
