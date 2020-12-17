@@ -6,4 +6,5 @@ RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(connect:(NSString)userId withToken: (NSString)token withInstanceId: (NSString)instanceId withAuthUrl: (NSString)authUrl)
 @end

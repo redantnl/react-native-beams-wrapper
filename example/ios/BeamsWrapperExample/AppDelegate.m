@@ -7,6 +7,9 @@
 
 #import "AppDelegate.h"
 
+@import PushNotifications;
+
+#import <BeamsWrapper-Bridging-Header.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -36,6 +39,15 @@ static void InitializeFlipper(UIApplication *application) {
   #if DEBUG
     InitializeFlipper(application);
   #endif
+
+  //NSString *x = @"4f758dae-7fb9-4314-8341-ff82ccd2b731";
+  
+  [[PushNotifications shared] startWithInstanceId:@"4f758dae-7fb9-4314-8341-ff82ccd2b731"]; // Can be found here: https://dash.pusher.com
+  [[PushNotifications shared] registerForRemoteNotifications];
+
+  NSError *anyError;
+  [[PushNotifications shared] addDeviceInterestWithInterest:@"debug-test" error:&anyError];
+  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"BeamsWrapperExample"
@@ -60,4 +72,15 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
-@end
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [[PushNotifications shared] registerDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
+    NSLog(@"%@", userInfo);
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
+}@end
