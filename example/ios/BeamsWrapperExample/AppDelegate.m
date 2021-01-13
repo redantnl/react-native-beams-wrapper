@@ -11,6 +11,10 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
+@import PushNotifications;
+#import <BeamsWrapper.h>
+
+
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -36,6 +40,10 @@ static void InitializeFlipper(UIApplication *application) {
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
   #endif
+  
+    [[PushNotifications shared] startWithInstanceId:@"4f758dae-7fb9-4314-8341-ff82ccd2b731"]; // Can be found here: https://dash.pusher.com
+    [[PushNotifications shared] registerForRemoteNotifications];
+  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"BeamsWrapperExample"
@@ -58,6 +66,24 @@ static void InitializeFlipper(UIApplication *application) {
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+//  [[BeamsWrapper shared] registerDeviceToken:deviceToken, "4f758dae-7fb9-4314-8341-ff82ccd2b731"];
+    NSLog(@"Registered for remote with token: %@", deviceToken);
+    [[PushNotifications shared] registerDeviceToken:deviceToken];
+    NSError *anyError;
+    [[PushNotifications shared] addDeviceInterestWithInterest:@"debug-testing" error:&anyError];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+  [[BeamsWrapper alloc] handleNotification:userInfo];
+//    [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
+    NSLog(@"%@", userInfo);
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
 }
 
 @end
