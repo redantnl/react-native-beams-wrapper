@@ -1,9 +1,25 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform, DeviceEventEmitter, NativeEventEmitter } from 'react-native';
+
+const { BeamsWrapper, BeamsWrapperEventHelper } = NativeModules;
+
+const iosEventListener = new NativeEventEmitter(
+  BeamsWrapperEventHelper
+);
 
 type BeamsWrapperType = {
   multiply(a: number, b: number): Promise<number>;
 };
 
-const { BeamsWrapper } = NativeModules;
+export function on(event: string, callback: any) {
+  if (Platform.OS === 'ios') {
+    iosEventListener.addListener(event, payload => callback(payload));
+  } else {
+    DeviceEventEmitter.addListener(event, payload => callback(payload));
+  }
+}
 
-export default BeamsWrapper as BeamsWrapperType;
+BeamsWrapper as BeamsWrapperType;
+
+export default {
+  on,
+};

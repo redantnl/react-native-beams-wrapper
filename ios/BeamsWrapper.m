@@ -1,4 +1,9 @@
 #import "BeamsWrapper.h"
+#import "BeamsWrapperEventHelper.h"
+#import "UIKit/UIKit.h"
+#import <UIKit/UIKit.h>
+#import "RCTLog.h"
+@import PushNotifications;
 
 @implementation BeamsWrapper
 
@@ -14,6 +19,50 @@ RCT_REMAP_METHOD(multiply,
   NSNumber *result = @([a floatValue] * [b floatValue]);
 
   resolve(result);
+}
+
+- (void)handleNotification:(NSDictionary *)userInfo
+{
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+
+    NSString *appState = @"active";
+    RCTLogInfo(@"handleNotification: %@", userInfo);
+
+    if ( state == UIApplicationStateActive)
+    {
+        RCTLogInfo(@"1. App is foreground and notification is recieved. Show a alert.");
+    }
+    else if( state == UIApplicationStateBackground)
+    {
+        RCTLogInfo(@"2. App is in background and notification is received. You can fetch required data here don't do anything with UI.");
+        appState = @"background";
+    }
+    else if( state == UIApplicationStateInactive)
+    {
+        RCTLogInfo(@"3. App came in foreground by used clicking on notification. Use userinfo for redirecting to specific view controller.");
+        appState = @"inactive";
+    }
+
+    if((bool)[userInfo valueForKeyPath:@"aps.data.incrementBadge"]) {
+        NSInteger badgeCount = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = (badgeCount+1);
+        RCTLogInfo(@"increment badge number too: %ld", (long)( badgeCount+1 ));
+    }
+
+    [BeamsWrapperEventHelper emitEventWithName:@"notification" andPayload:@{
+      @"userInfo":userInfo,
+      @"appState":appState
+    }];
+
+    [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
+}
+
+- (void)setDeviceToken:(NSData *)deviceToken
+{
+    RCTLogInfo(@"setDeviceToken: %@", deviceToken);
+    [[PushNotifications shared] registerDeviceToken:deviceToken];
+    [BeamsWrapperEventHelper emitEventWithName:@"registered" andPayload:@{}];
+    RCTLogInfo(@"REGISTERED!");
 }
 
 @end

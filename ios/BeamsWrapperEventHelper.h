@@ -6,12 +6,11 @@
 //  Copyright © 2021 Facebook. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface BeamsWrapperEventHelper : RCTEventEmitter
 
-@interface BeamsWrapperEventHelper : NSObject
++ (void)emitEventWithName:(NSString *)name andPayload:(NSDictionary *)payload;
 
 @end
-
-NS_ASSUME_NONNULL_END

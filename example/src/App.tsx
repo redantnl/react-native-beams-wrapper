@@ -8,7 +8,10 @@ export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    BeamsWrapper.multiply(3, 7).then(setResult);
+    // BeamsWrapper.multiply(3, 7).then(setResult);
+    BeamsWrapper.on('notification', function(payload) {
+      console.log(payload);
+    });
   }, []);
 
   return (
