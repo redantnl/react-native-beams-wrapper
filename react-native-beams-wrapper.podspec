@@ -11,12 +11,12 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-  s.source       = { :git => "https://github.com/Nouw/react-native-beams-module.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/redant.nl/react-native-beams-wrapper//react-native-beams-wrapper.git", :tag => "#{s.version}" }
 
-  
+
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  
 
-  s.dependency "React"
+
+  s.dependency "React-Core"
   s.dependency "PushNotifications", ">= 2.1.2"
 end

@@ -36,73 +36,72 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
 
     }
 
-  @ReactMethod
-  fun connect(userId: String, token: String, instanceId: String, authUrl: String) {
-    PushNotifications.start(reactContext.getApplicationContext(), instanceId);
-    Log.i("PusherModule", "Connected!");
-    val tokenProvider = BeamsTokenProvider(
-      authUrl,
-      object: AuthDataGetter {
-        override fun getAuthData(): AuthData {
-          return AuthData(
-            // Headers and URL query params your auth endpoint needs to
-            // request a Beams Token for a given user
-            headers = hashMapOf(
-              // for example:
-              "Authorization" to token
-            ),
-            queryParams = hashMapOf()
-          )
-        }
-      }
-    )
-
-    if (userId == null) {
-      Log.i("PusherModule", "UserId is not defined");
-    } else {
-      Log.i("PusherModule", "Hello!")
-      PushNotifications.clearAllState();
-
-      PushNotifications.setUserId(
-        userId,
-        tokenProvider,
-        object : BeamsCallback<Void, PusherCallbackError> {
-          override fun onFailure(error: PusherCallbackError) {
-            Log.e("BeamsAuth", "Could not login to Beams: ${error.message}");
-          }
-
-          override fun onSuccess(vararg values: Void) {
-            Log.i("BeamsAuth", "Beams login success");
-            PushNotifications.setOnMessageReceivedListenerForVisibleActivity(reactContext.getCurrentActivity(), object: PushNotificationReceivedListener {
-              override fun onMessageReceived(remoteMessage: RemoteMessage) {
-                val map: WritableMap = WritableNativeMap()
-                val notification: RemoteMessage.Notification? = remoteMessage.getNotification()
-                if (notification != null) {
-                  map.putString("body", notification.getBody())
-                  map.putString("title", notification.getTitle())
-                  map.putString("tag", notification.getTag())
-                  map.putString("click_action", notification.getClickAction())
-                  map.putString("icon", notification.getIcon())
-                  map.putString("color", notification.getColor())
-                  // map.putString("link", notification.getLink());
-                  reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("onNotification" +
-                      "" +
-                      "" +
-                      "" +
-                      "" +
-                      "", map)
-                  // System.out.print(remoteMessage.toString());
-                  Log.d("PUSHER_WRAPPER", "Notification received: " + notification.toString())
-                } else {
-                  Log.d("PUSHER_WRAPPER", "No notification received")
-                }
-              } })
+    @ReactMethod
+    fun connect(userId: String, token: String, instanceId: String, authUrl: String) {
+      PushNotifications.start(reactContext.getApplicationContext(), instanceId);
+      Log.i("PusherModule", "Connected!");
+      val tokenProvider = BeamsTokenProvider(
+        authUrl,
+        object: AuthDataGetter {
+          override fun getAuthData(): AuthData {
+            return AuthData(
+              // Headers and URL query params your auth endpoint needs to
+              // request a Beams Token for a given user
+              headers = hashMapOf(
+                // for example:
+                 "Authorization" to token
+              ),
+              queryParams = hashMapOf()
+            )
           }
         }
       )
-    }
-  }
 
+      if (userId == null) {
+        Log.i("PusherModule", "UserId is not defined");
+      } else {
+        Log.i("PusherModule", "Hello!")
+        PushNotifications.clearAllState();
+
+        PushNotifications.setUserId(
+          userId,
+          tokenProvider,
+          object : BeamsCallback<Void, PusherCallbackError> {
+            override fun onFailure(error: PusherCallbackError) {
+              Log.e("BeamsAuth", "Could not login to Beams: ${error.message}");
+            }
+
+            override fun onSuccess(vararg values: Void) {
+              Log.i("BeamsAuth", "Beams login success");
+              PushNotifications.setOnMessageReceivedListenerForVisibleActivity(reactContext.getCurrentActivity(), object: PushNotificationReceivedListener {
+                override fun onMessageReceived(remoteMessage: RemoteMessage) {
+                  val map: WritableMap = WritableNativeMap()
+                  val notification: RemoteMessage.Notification? = remoteMessage.getNotification()
+                  if (notification != null) {
+                    map.putString("body", notification.getBody())
+                    map.putString("title", notification.getTitle())
+                    map.putString("tag", notification.getTag())
+                    map.putString("click_action", notification.getClickAction())
+                    map.putString("icon", notification.getIcon())
+                    map.putString("color", notification.getColor())
+                    // map.putString("link", notification.getLink());
+                    reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                      .emit("onNotification" +
+                        "" +
+                        "" +
+                        "" +
+                        "" +
+                        "", map)
+                    // System.out.print(remoteMessage.toString());
+                    Log.d("PUSHER_WRAPPER", "Notification received: " + notification.toString())
+                  } else {
+                    Log.d("PUSHER_WRAPPER", "No notification received")
+                  }
+                } })
+            }
+          }
+        )
+      }
+    }
 
 }
