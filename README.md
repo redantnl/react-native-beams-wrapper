@@ -1,48 +1,45 @@
 # react-native-beams-wrapper
 
-A react native wrapper for the Pusher Beams SDK
+A react native wrapper for Pusher Beams
 
 ## Installation
 
-### Android
-yarn / npm
 ```sh
 npm install react-native-beams-wrapper
-
-yarn add react-native-beams-wrapper
 ```
 
-Go to `android/app/build.gradle` and add the following lines:
+## IOS
+Add this to the top of your AppDelegate.m file:
 
 ```
-android {
-  ...
-  defaultConfig {
-        applicationId "com.example.reactnativebeamswrapper"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true //Add this line
-  }
-  ...
+@import PushNotifications;
+#import <BeamsWrapper.h>
+```
+
+Add this in the `didFinishLaunchingWithOptions` function:
+```
+    [[PushNotifications shared] startWithInstanceId:@"<Your instance id>"]; // Can be found here: https://dash.pusher.com
+    [[PushNotifications shared] registerForRemoteNotifications];
+```
+
+Add this to the end:
+```
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"Registered for remote with token: %@", deviceToken);
+    [[PushNotifications shared] registerDeviceToken:deviceToken];
+    NSError *anyError;
+    [[PushNotifications shared] addDeviceInterestWithInterest:@"debug-testing" error:&anyError];
 }
 
-dependencies {
-      implementation fileTree(dir: "libs", include: ["*.jar"])
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+  [[BeamsWrapper alloc] handleNotification:userInfo];
+    NSLog(@"%@", userInfo);
+}
 
-    implementation 'com.google.firebase:firebase-messaging:20.2.3' // Add this line
-    implementation 'com.pusher:push-notifications-android:1.6.2' // Add this line
-
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    ...
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
 }
 ```
-
-Then download your google.services.json from the [firebase console](https://console.firebase.google.com/),
-and add the file to `android/app/`
 
 ## Usage
 
