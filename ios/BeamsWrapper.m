@@ -54,7 +54,7 @@ RCT_REMAP_METHOD(multiply,
       @"appState":appState
     }];
 
-    //[[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
+    [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
 }
 
 - (void)setDeviceToken:(NSData *)deviceToken
