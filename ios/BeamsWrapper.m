@@ -54,15 +54,35 @@ RCT_REMAP_METHOD(multiply,
       @"appState":appState
     }];
 
-    [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
+    //[[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
 }
 
 - (void)setDeviceToken:(NSData *)deviceToken
-{
+{                   
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
     [[PushNotifications shared] registerDeviceToken:deviceToken];
     [BeamsWrapperEventHelper emitEventWithName:@"registered" andPayload:@{}];
     RCTLogInfo(@"REGISTERED!");
+}
+
+RCT_EXPORT_METHOD(connect:(NSString*)userId:(NSString*)accessToken:(NSString*)instanceId:(NSString*)authUrl)
+{
+    BeamsTokenProvider *beamsTokenProvider = [[BeamsTokenProvider alloc] initWithAuthURL:authUrl getAuthData:^AuthData * _Nonnull{
+        NSString *sessionToken = accessToken;
+        NSDictionary *headers = @{@"Authorization": [NSString stringWithFormat:@"Bearer %@", sessionToken]}; // Headers your auth endpoint needs
+        NSDictionary *queryParams = @{}; // URL query params your auth endpoint needs
+
+        return [[AuthData alloc] initWithHeaders:headers queryParams:queryParams];
+    }];
+
+    [[PushNotifications shared] setUserId:userId tokenProvider:beamsTokenProvider completion:^(NSError * _Nullable anyError) {
+        if (anyError) {
+            NSLog(@"Error: %@", anyError);
+        }
+        else {
+            NSLog(@"Successfully authenticated with Pusher Beams");
+        }
+    }];
 }
 
 @end
