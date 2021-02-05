@@ -1,6 +1,6 @@
 {
   "name": "react-native-beams-wrapper",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A react native wrapper for Pusher Beams",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
