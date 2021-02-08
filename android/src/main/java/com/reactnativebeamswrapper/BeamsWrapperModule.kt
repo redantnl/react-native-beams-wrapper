@@ -39,7 +39,7 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
     @ReactMethod
     fun connect(userId: String, token: String, instanceId: String, authUrl: String) {
       PushNotifications.start(reactContext.getApplicationContext(), instanceId);
-      Log.i("PusherModule", "Connected!");
+      Log.i("BeamsWrapper", "Connected!");
       val tokenProvider = BeamsTokenProvider(
         authUrl,
         object: AuthDataGetter {
@@ -58,9 +58,9 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
       )
 
       if (userId == null) {
-        Log.i("PusherModule", "UserId is not defined");
+        Log.i("BeamsWrapper", "UserId is not defined");
       } else {
-        Log.i("PusherModule", "Hello!")
+        Log.i("BeamsWrapper", "Hello!")
         PushNotifications.clearAllState();
 
         PushNotifications.setUserId(
@@ -86,7 +86,7 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
                     map.putString("color", notification.getColor())
                     // map.putString("link", notification.getLink());
                     reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                      .emit("onNotification" +
+                      .emit("notification" +
                         "" +
                         "" +
                         "" +
