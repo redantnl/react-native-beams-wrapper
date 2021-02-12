@@ -58,7 +58,7 @@ RCT_REMAP_METHOD(multiply,
 }
 
 - (void)setDeviceToken:(NSData *)deviceToken
-{                   
+{
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
     [[PushNotifications shared] registerDeviceToken:deviceToken];
     [BeamsWrapperEventHelper emitEventWithName:@"registered" andPayload:@{}];
@@ -67,6 +67,9 @@ RCT_REMAP_METHOD(multiply,
 
 RCT_EXPORT_METHOD(connect:(NSString*)userId:(NSString*)accessToken:(NSString*)instanceId:(NSString*)authUrl)
 {
+    [[PushNotifications shared] startWithInstanceId:instanceId];
+    [[PushNotifications shared] registerForRemoteNotifications];
+
     BeamsTokenProvider *beamsTokenProvider = [[BeamsTokenProvider alloc] initWithAuthURL:authUrl getAuthData:^AuthData * _Nonnull{
         NSString *sessionToken = accessToken;
         NSDictionary *headers = @{@"Authorization": [NSString stringWithFormat:@"Bearer %@", sessionToken]}; // Headers your auth endpoint needs
@@ -83,6 +86,13 @@ RCT_EXPORT_METHOD(connect:(NSString*)userId:(NSString*)accessToken:(NSString*)in
             NSLog(@"Successfully authenticated with Pusher Beams");
         }
     }];
+}
+
+RCT_EXPORT_METHOD(disconnect)
+{
+  [[PushNotifications shared] clearAllStateWithCompletion:^() {
+    RCTLogInfo(@"Finished clearing the SDK state");
+  }];
 }
 
 @end

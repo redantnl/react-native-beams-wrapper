@@ -104,4 +104,11 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
       }
     }
 
+  @ReactMethod
+  fun disconnect() {
+    Log.d("PUSHER_WRAPPER", "Clearing the SDK state");
+    PushNotifications.clearAllState();
+    Log.d("PUSHER_WRAPPER", "Finished clearing the SDK state")
+  }
+
 }

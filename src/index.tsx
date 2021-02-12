@@ -28,4 +28,7 @@ export default {
       DeviceEventEmitter.addListener(event, (payload) => callback(payload));
     }
   },
+  disconnect: () => {
+    return BeamsWrapper.disconnect();
+  }
 };
