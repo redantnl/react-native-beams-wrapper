@@ -49,7 +49,7 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
               // request a Beams Token for a given user
               headers = hashMapOf(
                 // for example:
-                 "Authorization" to token
+                 "X-Authorization" to token
               ),
               queryParams = hashMapOf()
             )

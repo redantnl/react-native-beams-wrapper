@@ -72,7 +72,7 @@ RCT_EXPORT_METHOD(connect:(NSString*)userId:(NSString*)accessToken:(NSString*)in
 
     BeamsTokenProvider *beamsTokenProvider = [[BeamsTokenProvider alloc] initWithAuthURL:authUrl getAuthData:^AuthData * _Nonnull{
         NSString *sessionToken = accessToken;
-        NSDictionary *headers = @{@"Authorization": [NSString stringWithFormat:@"Bearer %@", sessionToken]}; // Headers your auth endpoint needs
+        NSDictionary *headers = @{@"X-Authorization": [NSString stringWithFormat:@"Bearer %@", sessionToken]}; // Headers your auth endpoint needs
         NSDictionary *queryParams = @{}; // URL query params your auth endpoint needs
 
         return [[AuthData alloc] initWithHeaders:headers queryParams:queryParams];
