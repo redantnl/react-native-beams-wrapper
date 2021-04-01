@@ -21,14 +21,22 @@ export default {
   ) => {
     return BeamsWrapper.connect(userId, token, instanceId, authUrl);
   },
-  on(event: string, callback: Function) {
+  on(event: string, callback: (payload: any) => void) {
     if (Platform.OS === 'ios') {
-      iosEventListener.addListener(event, (payload) => callback(payload));
+      iosEventListener.addListener(event, (payload: any) => callback(payload));
     } else {
-      DeviceEventEmitter.addListener(event, (payload) => callback(payload));
+      DeviceEventEmitter.addListener(event, (payload: any) => callback(payload));
     }
   },
   disconnect: () => {
     return BeamsWrapper.disconnect();
+  },
+  removeListeners(event: string) {
+    if (Platform.OS === 'ios') {
+      iosEventListener.removeAllListeners(event);
+    } else {
+      DeviceEventEmitter.removeAllListeners(event);
+    }
   }
 };
+

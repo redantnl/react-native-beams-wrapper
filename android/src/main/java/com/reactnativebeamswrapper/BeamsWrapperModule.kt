@@ -84,7 +84,13 @@ class BeamsWrapperModule(reactContext: ReactApplicationContext) : ReactContextBa
                     map.putString("click_action", notification.getClickAction())
                     map.putString("icon", notification.getIcon())
                     map.putString("color", notification.getColor())
-                    // map.putString("link", notification.getLink());
+                    if (remoteMessage.getData().get("navigateTo") !== null) {
+                      map.putString("navigateTo", remoteMessage.getData().get("navigateTo"))
+                    }
+
+                    if (remoteMessage.getData().get("objectGUID") !== null) {
+                      map.putString("objectGUID", remoteMessage.getData().get("objectGUID"))
+                    }
                     reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                       .emit("notification" +
                         "" +
