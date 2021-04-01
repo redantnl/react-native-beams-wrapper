@@ -1,8 +1,15 @@
+<<<<<<< Updated upstream
 #import "BeamsWrapper.h"
 #import "BeamsWrapperEventHelper.h"
 #import "UIKit/UIKit.h"
 #import <UIKit/UIKit.h>
 #import "RCTLog.h"
+=======
+#import <React/RCTBridgeModule.h>
+#import "BeamsWrapperEventHelper.h"
+#import "RCTLog.h"
+
+>>>>>>> Stashed changes
 @import PushNotifications;
 
 @implementation BeamsWrapper
@@ -95,4 +102,16 @@ RCT_EXPORT_METHOD(disconnect)
   }];
 }
 
+<<<<<<< Updated upstream
+=======
+RCT_EXTERN_METHOD(connect:(NSString)userId withToken: (NSString)token withInstanceId: (NSString)instanceId withAuthUrl: (NSString)authUrl)
+
+RCT_EXTERN_METHOD(handleNotification:(NSDisctionary *)userInfo)
+
+
+//-(void)setDeviceToken:(NSData *)deviceToken instanceToken: (NSString *) instanceId {
+//    
+//};
+
+>>>>>>> Stashed changes
 @end

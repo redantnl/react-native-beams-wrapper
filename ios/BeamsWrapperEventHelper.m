@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 //
 //  BeamsWrapperEventHelper.m
 //  BeamsWrapper
@@ -6,6 +7,8 @@
 //  Copyright © 2021 Facebook. All rights reserved.
 //
 
+=======
+>>>>>>> Stashed changes
 #import "BeamsWrapperEventHelper.h"
 
 @implementation BeamsWrapperEventHelper
@@ -57,4 +60,8 @@ RCT_EXPORT_MODULE();
                                                       userInfo:eventDetail];
 }
 
+<<<<<<< Updated upstream
 @end
+=======
+@end
+>>>>>>> Stashed changes

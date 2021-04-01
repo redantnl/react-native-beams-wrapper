@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 //
 //  BeamsWrapperEventHelper.h
 //  BeamsWrapper
@@ -6,6 +7,8 @@
 //  Copyright © 2021 Facebook. All rights reserved.
 //
 
+=======
+>>>>>>> Stashed changes
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
@@ -13,4 +16,8 @@
 
 + (void)emitEventWithName:(NSString *)name andPayload:(NSDictionary *)payload;
 
+<<<<<<< Updated upstream
 @end
+=======
+@end
+>>>>>>> Stashed changes
